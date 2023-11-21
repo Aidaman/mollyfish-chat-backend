@@ -44,83 +44,83 @@ describe('AuthService', () => {
         });
 
         it('should fail because email is not an email', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = '12345678';
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = '12345678';
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should fail because email is empty', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = '';
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = '';
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should fail because password is not string', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = 'email@example.com';
-            loginDto.password = null;
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = 'email@example.com';
+            dto.password = null;
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should fail because password is empty', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = 'email@example.com';
-            loginDto.password = '';
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = 'email@example.com';
+            dto.password = '';
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should fail because password is shorter than 8 symbols', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = 'email@example.com';
-            loginDto.password = '123456';
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = 'email@example.com';
+            dto.password = '123456';
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should fail because username is not string', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = 'email@example.com';
-            loginDto.password = '12345678';
-            loginDto.username = null;
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = 'email@example.com';
+            dto.password = '12345678';
+            dto.username = null;
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should fail because username is empty', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = 'email@example.com';
-            loginDto.password = '12345678';
-            loginDto.username = '';
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = 'email@example.com';
+            dto.password = '12345678';
+            dto.username = '';
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should fail because username is shorter than 8 symbols', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = 'email@example.com';
-            loginDto.password = '12345678';
-            loginDto.username = 'molly';
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = 'email@example.com';
+            dto.password = '12345678';
+            dto.username = 'molly';
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should fail because username is greater than 32 symbols', () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = 'email@example.com';
-            loginDto.password = '12345678';
-            loginDto.username = 'abcdefghijklmnopqrstuvwxyz1234567890';
-            expect(service.login(loginDto)).toBe(null);
+            const dto: LoginDto = new LoginDto();
+            dto.email = 'email@example.com';
+            dto.password = '12345678';
+            dto.username = 'abcdefghijklmnopqrstuvwxyz1234567890';
+            expect(service.login(dto)).toBe(null);
         });
 
         it('should login', async () => {
-            const loginDto: LoginDto = new LoginDto();
-            loginDto.email = 'email@example.com';
-            loginDto.password = '12345678';
-            loginDto.username = 'mollyfish';
+            const dto: LoginDto = new LoginDto();
+            dto.email = 'email@example.com';
+            dto.password = '12345678';
+            dto.username = 'mollyfish';
 
             const token: string = await service.signToken(
                 1,
-                loginDto.email,
-                loginDto.username,
+                dto.email,
+                dto.username,
             );
 
-            expect(service.login(loginDto)).toHaveReturnedWith(token);
+            expect(service.login(dto)).toHaveReturnedWith(token);
         });
     });
 
