@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+    mollyfish-dev-db:
+        image: postgres:13
+        ports:
+            - 5434:5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: P05t9R355
+            POSTGRES_DB: mollyfish
+        networks:
+            - me
+    mollyfish-test-db:
+        image: postgres:13
+        ports:
+            - 6543:6545
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: P05t9R355
+            POSTGRES_DB: mollyfish
+        networks:
+            - me
+networks:
+    me:
