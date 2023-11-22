@@ -86,7 +86,7 @@ export class AuthService {
         return null;
     }
 
-    public async signToken(
+    private async signToken(
         userId: number,
         email: string,
         username: string,
