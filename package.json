@@ -6,27 +6,35 @@
     "private": true,
     "license": "UNLICENSED",
     "scripts": {
-        "prisma:dev:deploy": "prisma migrate deploy",
+        "prisma:dev:deploy": "dotenv -e .env.dev prisma migrate deploy",
         "db:dev:rm": "docker compose rm mollyfish-dev-db -sfv",
         "db:dev:up": "docker compose up mollyfish-dev-db -d",
-        "db:dev:restart": "dotenv -e .env -- npm run db:dev:rm && npm run db:dev:up && sleep 1 && npm run prisma:dev:deploy",
-        "prisma:test:deploy": "prisma migrate deploy",
+        "db:dev:restart": "dotenv -e .env.dev -- npm run db:dev:rm && npm run db:dev:up && sleep 1 && npm run prisma:dev:deploy",
+
+        "prisma:test:deploy": "dotenv -e .env.test prisma migrate deploy",
         "db:test:rm": "docker compose rm mollyfish-test-db -sfv",
         "db:test:up": "docker compose up mollyfish-test-db -d",
-        "db:test:restart": "dotenv -e .env.test --  npm run db:test:rm && npm run db:test:up && sleep 1 && npm run prisma:test:deploy",
+        "db:test:restart": "dotenv -e .env.test -- npm run db:test:rm && npm run db:test:up && sleep 1 && npm run prisma:test:deploy",
+        
         "build": "nest build",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+        
+        "prestart": "npm run db:dev:restart",
         "start": "nest start",
         "start:dev": "nest start --watch",
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main",
+        
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+        
         "pretest": "npm run db:test:restart",
-        "test": "jest",
+        "test": "dotenv -e .env.test -- jest",
         "pretest:watch": "npm run db:test:restart",
         "test:watch": "jest --watch",
+        
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+        
         "pretest:e2e": "npm run db:test:restart",
         "test:e2e": "dotenv -e .env.test -- jest --watch --no-cache --config ./test/jest-e2e.json"
     },
