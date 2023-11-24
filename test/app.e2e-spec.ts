@@ -4,6 +4,7 @@ import { AppModule } from '../src/app.module';
 import { LoginDto, SignupDto } from '../src/auth/dto';
 import { PrismaService } from '../src/prisma/prisma.service';
 import * as pactum from 'pactum';
+import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 
 describe('App e2e', () => {
     const apiUrl: string = 'http://localhost:3333';
@@ -19,6 +20,7 @@ describe('App e2e', () => {
         app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
         await app.init();
+        await app.listen(3333);
 
         prismaService = app.get(PrismaService);
         prismaService.cleanDb();
@@ -88,6 +90,7 @@ describe('App e2e', () => {
                     .spec()
                     .post('http://localhost:3333/auth/signup')
                     .withBody(signupDto)
+                    .stores('accessToken', 'access_token')
                     .expectStatus(201);
             });
         });
@@ -137,10 +140,43 @@ describe('App e2e', () => {
             it('should login', () => {
                 return pactum
                     .spec()
-                    .post('http://localhost:3333/auth/login')
+                    .post(`${apiUrl}/auth/login`)
                     .withBody(loginDto)
+                    .stores('accessToken', 'access_token')
                     .expectStatus(201);
             });
+        });
+    });
+
+    describe('User', () => {
+        it('should fail because token is incorrect or empty', () => {
+            return pactum.spec().get(`${apiUrl}/user`).expectStatus(401);
+        });
+        it('should return current user', () => {
+            return pactum
+                .spec()
+                .get(`${apiUrl}/user`)
+                .withHeaders('Authorization', 'Bearer $S{accessToken}')
+                .expectStatus(200)
+                .expectBodyContains('id');
+        });
+        it('should should edit the user and return the copy of result', () => {
+            const editUserDto: UpdateUserDto = {
+                email: 'updated@email.com',
+            };
+            return pactum
+                .spec()
+                .patch(`${apiUrl}/user`)
+                .withBody(editUserDto)
+                .withHeaders('Authorization', 'Bearer $S{accessToken}')
+                .expectStatus(200);
+        });
+        it('should should remove the user and return what been deleted', () => {
+            return pactum
+                .spec()
+                .delete(`${apiUrl}/user`)
+                .withHeaders('Authorization', 'Bearer $S{accessToken}')
+                .expectStatus(200);
         });
     });
 });
